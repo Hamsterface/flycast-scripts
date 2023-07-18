@@ -28,7 +28,7 @@ The Codebreaker script requires two lua files, `codebreaker.lua` and `codes.lua`
 
 ### Usage
 When a game is launched, a window should appear in the upper left corner of the screen showing the available cheat codes, if any are loaded. Click the buttons to enable and disable them. Similar to SACX, the final button allows you to hide the window from your screen. Should you do so, press the controller's `C` button to re-open the menu.
-If the `codes.lua` file is updates, you may press the `Reload Codes` button to refresh.
+If the `codes.lua` file is updated, you may press the `Reload Codes` button to refresh.
 
 ### Adding new codes
 Follow the layout shown in `codes.lua` to add new codes. The codes are structured such that:

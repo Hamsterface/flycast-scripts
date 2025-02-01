@@ -207,7 +207,7 @@ function runCode(code)
         ((cond == 3) and (value <= test)) or
         ((cond >  3) and (value ~= test))
       ) then
-        skipCodes = 1
+        skipCodes = 2
       end
     elseif(opbyte == 0x0E) then
       local numLines = (code[i] >> 16) & 0xFF

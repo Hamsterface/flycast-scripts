@@ -17,10 +17,7 @@ addr = {
     p1Obj = 0x8C795180,
     status = 0x8C751F14,
     lives = 0x8C75B744,
-    levelSelect = 0x8C7694D0,
-    
-    level = 0x8C751F1A, act = 0x8C
-    
+    levelSelect = 0x8C7694D0
   },
   ["MK-51000  V1.005"] = {
     name = "US 1.1",
@@ -122,19 +119,19 @@ function levelSelect()
   flycast.memory.write8(pointers.levelSelect, 2)
 end
 
-function reloadLevel()
-  local pointers = addr[version]
-  if(not (pointers and
-    pointers.level and pointers.act and
-    pointers.nextLevel and pointer.nextAct and
-    pointers.status))
-  then return end
-  
-  local level = flycast.memory.read8(pointers.level)
-  local act = flycast.memory.read8(pointers.act)
-  flycast.memory.write8(pointers.nextLevel, level)
-  flycast.memory.write8(pointers.nextAct, act)
-end
+-- function reloadLevel()
+--   local pointers = addr[version]
+--   if(not (pointers and
+--     pointers.level and pointers.act and
+--     pointers.nextLevel and pointer.nextAct and
+--     pointers.status))
+--   then return end
+--   
+--   local level = flycast.memory.read8(pointers.level)
+--   local act = flycast.memory.read8(pointers.act)
+--   flycast.memory.write8(pointers.nextLevel, level)
+--   flycast.memory.write8(pointers.nextAct, act)
+-- end
 
 function respawn()
   local pointers = addr[version]
@@ -143,6 +140,48 @@ function respawn()
   local lives = flycast.memory.read8(pointers.lives)
   flycast.memory.write8(pointers.lives, lives+1)
   flycast.memory.write8(pointers.status, 6)
+end
+
+function hurtPlayer()
+  local pointers = addr[version]
+  if(not pointers) then return end
+  
+  local p1Obj = flycast.memory.read32(pointers.p1Obj)
+  if((p1Obj < 0x8C000000) or (p1Obj > 0x8D000000)) then return end
+  
+  flycast.memory.write16(p1Obj + charObj1.BITFIELD, 0x0004)
+end
+
+custRestart = {
+  rot = 0x00000000,
+  posX = 0x00000000,
+  posY = 0x00000000,
+  posZ = 0x00000000
+}
+function copyLoc()
+  local pointers = addr[version]
+  if(not pointers) then return end
+  
+  local p1Obj = flycast.memory.read32(pointers.p1Obj)
+  if((p1Obj < 0x8C000000) or (p1Obj > 0x8D000000)) then return end
+
+  custRestart.rot = flycast.memory.read32(p1Obj + charObj1.ROTATION)
+  custRestart.posX = flycast.memory.read32(p1Obj + charObj1.POSITION)
+  custRestart.posY = flycast.memory.read32(p1Obj + charObj1.POSITION + 4)
+  custRestart.posZ = flycast.memory.read32(p1Obj + charObj1.POSITION + 8)
+end
+
+function pasteLoc()
+  local pointers = addr[version]
+  if(not pointers) then return end
+  
+  local p1Obj = flycast.memory.read32(pointers.p1Obj)
+  if((p1Obj < 0x8C000000) or (p1Obj > 0x8D000000)) then return end
+
+  flycast.memory.write32(p1Obj + charObj1.ROTATION, custRestart.rot)
+  flycast.memory.write32(p1Obj + charObj1.POSITION, custRestart.posX)
+  flycast.memory.write32(p1Obj + charObj1.POSITION + 4, custRestart.posY)
+  flycast.memory.write32(p1Obj + charObj1.POSITION + 8, custRestart.posZ)
 end
 
 timer = 0
@@ -158,10 +197,13 @@ function cbOverlay()
   local ui = flycast.ui
   ui.beginWindow("SA1 Trainer", 10, 10, 200, 0)
   ui.text((addr[version] and addr[version].name) or version)
-  ui.button("Respawn", respawn)
+  ui.button("Respawn Now", respawn)
+  ui.button("Hurt Player", hurtPlayer)
   ui.button("Clear Level", clearLevel)
   ui.button("Level Select", levelSelect)
   ui.button("Free Movement", debugFly)
+  ui.button("Set Cust Restart", copyLoc)
+  ui.button("Goto Cust Restart", pasteLoc)
   ui.endWindow()
 end
 

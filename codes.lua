@@ -12,11 +12,11 @@ return {
     },
     -- Press Start to skip Sky Chase
     ["Skip Sky Chase"] = {
-      0x0E040024, 0x00751F1A,
-      0x0D75D9A4, 0x00000008,
-      0x02751F14, 0x00210005,
-      0x0E040025, 0x00751F1A,
-      0x0D75D9A4, 0x00000008,
+      0x0E040024, 0x00751F1A, -- 0E080008 0075D9A4
+      0x0D75D9A4, 0x00000008, -- 0E06000E 00751F14
+      0x02751F14, 0x00210005, -- 0E020024 01751F1A
+      0x0E040025, 0x00751F1A, -- 0D751F1A 00000025
+      0x0D75D9A4, 0x00000008, -- 00751F14 00000005
       0x02751F14, 0x00210005
     },
     -- Press Start to skip Chaos 4
@@ -57,6 +57,15 @@ return {
     -- Disables all music and dialogue
     ["Disable Music and Voices"] = {
       0x026124F0, 0x00000000
+    },
+    ["Skip Any Level (Y+Start)"] = {
+      0x0E04000E, 0x00751F14,
+      0x0E020208, 0x0075D9A4,
+      0x00751F14, 0x00000005
+    },
+    ["Infinite Restarts"] = {
+      0x0D751F14, 0x00000006,
+      0x0075B744, 0x00000005
     }
   },
   ["MK-51000  V1.005"] = {
@@ -89,6 +98,33 @@ return {
     ["Level Select (Y+Start)"] = {
       0x0D754E4C, 0x00000208,
       0x00760970, 0x00000002
+    }
+  },
+  ["MK-51058  V1.005"] = {
+    name = "Jet Grind Radio (USA)",
+    -- Unlock all graffiti
+    ["All Graffiti"] = {
+      0x0110F42E, 0x00000101,
+      0x0410F430, 0x00190001, 0x01010101
+    }
+  },
+  ["T9717N    V1.001"] = {
+    name = "Ready 2 Rumble Round 2 (USA)",
+    ["All Boxers Unlocked"] = {
+      0x0415996C, 0x000C0001, 0x001F001F
+    }
+  },
+  ["T3601M    V1.002"] = {
+    name = "Dead or Alive 2 Limited Edition",
+    ["All Fighters Unlocked"] = {
+      0x01239CEA, 0X00000101
+    },
+    ["All Costumes Unlocked"] = {
+      0x01239CEE, 0x0000FFFF,
+      0x04239CF0, 0x00030001, 0xFFFFFFFF
+    },
+    ["Enable CG Gallery"] = {
+      0x01239CEC, 0x00000563
     }
   }
 }
